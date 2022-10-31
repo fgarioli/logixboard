@@ -23,3 +23,5 @@ app.listen(port, async () => {
   await prisma.$connect();
   console.log(`Example app listening at http://localhost:${port}`)
 });
+
+export default app;
