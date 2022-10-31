@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model shipment {
+  referenceId          String                  @id
+  type                 String
+  organizations        shipment_organization[]
+  estimatedTimeArrival String?
+  transportPacks       transport_pack[]
+}
+
+model shipment_organization {
+  shipmentId     String
+  organizationId String
+  shipment       shipment     @relation(fields: [shipmentId], references: [referenceId])
+  organization   organization @relation(fields: [organizationId], references: [id])
+
+  @@id([shipmentId, organizationId])
+}
+
+model organization {
+  id                    String                  @id
+  type                  String
+  code                  String                  @unique
+  shipment_organization shipment_organization[]
+}
+
+model transport_pack {
+  id         Int      @id @default(autoincrement())
+  shipmentId String
+  shipment   shipment @relation(fields: [shipmentId], references: [referenceId])
+  weight     String
+  unit       String
+}
