@@ -1,6 +1,0 @@
-node_modules
-build
-.dockerignore
-Dockerfile
-data
-migration_lock.toml
